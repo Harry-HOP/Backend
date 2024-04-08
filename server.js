@@ -25,4 +25,3 @@ app.use('/user', personRouter);
 
 app.listen(3000,()=>{console.log("Site is live")})
 
-// uploaded to git
