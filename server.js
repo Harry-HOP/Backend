@@ -9,9 +9,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 3000
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
-}) 
+// app.get('/', function (req, res) {
+//   res.send('Hello World')
+// }) 
 
 
 
@@ -19,7 +19,7 @@ app.get('/', function (req, res) {
 const personRouter = require('./Router/Person');
 
 // use the routers
-app.use('/user', personRouter);
+app.use('/', personRouter);
 
 
 
