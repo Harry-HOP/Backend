@@ -1,8 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User')
+const User = require('../models/User');
+const {jwtAuthMiddleware, generateToken} = require('../jwt');
 
-router.post('/', async(req, res) => {
+router.post('/login', async(req, res) =>{
+    try{
+        // Extract username and password from request body
+        const {username, password} = req.body;
+        
+        // Find the user by username
+        const user = await User.findOne({username: username});
+
+        // if user does not exist or password does not match , return error
+        if(!user || !(await password==user.password)){
+            return res.status(401).json({error: 'Invalid username or password'});
+        }
+
+        // generate token 
+        const payload = {
+            id: user.id,
+            username: user.username
+        }
+
+        const token = generateToken(payload);
+
+        //return token as response
+        res.json({token});
+
+
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({error: 'Internal Server Errorrrr'});
+    }
+})
+router.post('/Signup', async(req, res) => {
     try{
         // Get the user data from the request body
     const data = req.body;
@@ -13,7 +45,12 @@ router.post('/', async(req, res) => {
 
     const resposnse = await newUser.save();
     console.log("Data Saved");
-    res.status(200).json({resposnse});
+    const paylod = {
+        id: resposnse.id,
+        username: resposnse.username
+    }
+    const token = generateToken(paylod);
+    res.status(200).json({resposnse: resposnse, token: token});
   
     // Send a response to the client
     // res.send('User created successfully!');
@@ -26,7 +63,7 @@ router.post('/', async(req, res) => {
   });
 
 
-  router.get('/', async(req, res) => {
+  router.get('/',jwtAuthMiddleware,async(req, res) => {
 
     try{
         const data = await User.find();
