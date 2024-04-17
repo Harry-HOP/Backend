@@ -63,7 +63,7 @@ router.post('/Signup', async(req, res) => {
   });
 
 
-  router.get('/',jwtAuthMiddleware,async(req, res) => {
+  router.get('/',async(req, res) => {
 
     try{
         const data = await User.find();
