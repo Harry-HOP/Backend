@@ -42,16 +42,16 @@ userSchema.pre('save', async function(next){
 })
 
 userSchema.methods.comparePassword = async function(candiatePassword){
-    try{
-        // use bcrypt to compare the provided password with hashed password
-        const isMatch = await bcrypt.compare(candiatePassword, this.password);
-        return isMatch;
+        try{
+            // use bcrypt to compare the provided password with hashed password
+            const isMatch = await bcrypt.compare(candiatePassword, this.password);
+            return isMatch;
 
+        }
+        catch(err){
+            throw err;
+        }
     }
-    catch(err){
-        throw err;
-    }
-}
 
 
 
